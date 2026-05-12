@@ -1,17 +1,32 @@
 {
-  "stare": {
-    "viata_nora": 100,
-    "timp": 600,
-    "suspiciune": 0
+  "title": "Carry-On: Protocolul Kopek",
+  "startBlock": "shift_start",
+  "properties": {
+    "stres": { "min": 0, "max": 100, "initial": 20, "onMaxBlock": "final_panica" },
+    "suspiciune": { "min": 0, "max": 100, "initial": 0, "onMaxBlock": "final_arestat" },
+    "viata_nora": { "min": 0, "max": 100, "initial": 100, "onMinBlock": "final_tragedie" },
+    "dovezi": { "min": 0, "max": 10, "initial": 0 },
+    "integritate": { "min": 0, "max": 100, "initial": 100 }
   },
-  "scene": [
-    {
-      "id": "start",
-      "text": "Ești Ethan. Vocea din cască îți spune să nu oprești banda. Ce faci?",
-      "optiuni": [
-        { "text": "Ignoră alerta", "urmatoarea": "pas_2" },
-        { "text": "Oprește banda", "urmatoarea": "alerta_securitate" }
+  "blocks": {
+    "shift_start": {
+      "text": "LAX, Ajunul Crăciunului. Terminalul este un haos de luminițe și călători grăbiți. Găsești o cască bluetooth uitată pe banda de control. O pui în ureche și auzi o voce calmă, dar tăioasă: 'Ethan, nu tresări. Uită-te la Nora, la Poarta 42. Arată minunat în uniformă, nu-i așa? Ar fi păcat să i se întâmple ceva în seara asta. Dacă vrei să o vezi la cina de Crăciun, vei urma instrucțiunile mele.'",
+      "decisions": [
+        {
+          "text": "Acceptă condițiile Călătorului pentru a o proteja pe Nora.",
+          "targetBlock": "ordin_scaner",
+          "effects": [
+            { "type": "ADD", "property": "stres", "value": 10 }
+          ]
+        },
+        {
+          "text": "Rămâi tăcut și verifică discret dacă Nora e la postul ei.",
+          "targetBlock": "amenintare_discreta",
+          "effects": [
+            { "type": "ADD", "property": "dovezi", "value": 2 }
+          ]
+        }
       ]
     }
-  ]
+  }
 }
