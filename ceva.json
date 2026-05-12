@@ -1,0 +1,17 @@
+{
+  "stare": {
+    "viata_nora": 100,
+    "timp": 600,
+    "suspiciune": 0
+  },
+  "scene": [
+    {
+      "id": "start",
+      "text": "Ești Ethan. Vocea din cască îți spune să nu oprești banda. Ce faci?",
+      "optiuni": [
+        { "text": "Ignoră alerta", "urmatoarea": "pas_2" },
+        { "text": "Oprește banda", "urmatoarea": "alerta_securitate" }
+      ]
+    }
+  ]
+}
