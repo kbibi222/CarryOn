@@ -1,32 +1,207 @@
 {
-  "title": "Carry-On: Protocolul Kopek",
+  "title": "Carry-On",
   "startBlock": "shift_start",
   "properties": {
-    "stres": { "min": 0, "max": 100, "initial": 20, "onMaxBlock": "final_panica" },
-    "suspiciune": { "min": 0, "max": 100, "initial": 0, "onMaxBlock": "final_arestat" },
-    "viata_nora": { "min": 0, "max": 100, "initial": 100, "onMinBlock": "final_tragedie" },
-    "dovezi": { "min": 0, "max": 10, "initial": 0 },
-    "integritate": { "min": 0, "max": 100, "initial": 100 }
+    "stres": { "min": 0, "max": 100, "initial": 20, "hudLabel": "STRES", "visibleInHud": true, "hudOrder": 1, "onMaxBlock": "final_panica" },
+    "suspiciune": { "min": 0, "max": 100, "initial": 0, "hudLabel": "SUSPICIUNE", "visibleInHud": true, "hudOrder": 2, "onMaxBlock": "final_arestat" },
+    "viata_nora": { "min": 0, "max": 100, "initial": 100, "hudLabel": "VIATA NORA", "visibleInHud": true, "hudOrder": 3, "onMinBlock": "final_tragedie" },
+    "dovezi": { "min": 0, "max": 10, "initial": 0, "hudLabel": "DOVEZI", "visibleInHud": true, "hudOrder": 4 },
+    "integritate": { "min": 0, "max": 100, "initial": 100, "hudLabel": "INTEGRITATE", "visibleInHud": false, "hudOrder": 5 }
   },
   "blocks": {
     "shift_start": {
-      "text": "LAX, Ajunul Crăciunului. Terminalul este un haos de luminițe și călători grăbiți. Găsești o cască bluetooth uitată pe banda de control. O pui în ureche și auzi o voce calmă, dar tăioasă: 'Ethan, nu tresări. Uită-te la Nora, la Poarta 42. Arată minunat în uniformă, nu-i așa? Ar fi păcat să i se întâmple ceva în seara asta. Dacă vrei să o vezi la cina de Crăciun, vei urma instrucțiunile mele.'",
+      "text": "Esti Ethan si incepi tura de noapte la aeroportul LAX. Pe banda de control gasesti o casca bluetooth. O pui in ureche si auzi o voce: 'Ethan, uita-te la Nora, sotia ta. Este la Poarta 42. Daca vrei sa ramana in siguranta in seara asta, va trebui sa respecti toate instructiunile mele.'",
       "decisions": [
-        {
-          "text": "Acceptă condițiile Călătorului pentru a o proteja pe Nora.",
-          "targetBlock": "ordin_scaner",
-          "effects": [
-            { "type": "ADD", "property": "stres", "value": 10 }
-          ]
+        { 
+          "text": "Accepti conditiile: 'Am inteles, nu ii face rau.'", 
+          "targetBlock": "amenintare_discreta", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 10 }] 
         },
-        {
-          "text": "Rămâi tăcut și verifică discret dacă Nora e la postul ei.",
-          "targetBlock": "amenintare_discreta",
-          "effects": [
-            { "type": "ADD", "property": "dovezi", "value": 2 }
-          ]
+        { 
+          "text": "Ramai tacut si te uiti pe camere dupa Nora.", 
+          "targetBlock": "amenintare_discreta", 
+          "effects": [{ "type": "ADD", "property": "dovezi", "value": 2 }] 
         }
       ]
-    }
+    },
+    "amenintare_discreta": {
+      "text": "Scanerul tau se stinge si se aprinde singur. Vocea din casca spune: 'Nu incerca sa pacalesti sistemul. Eu controlez toutul aici. Vezi ca se apropie rucsacul pe banda ta.'",
+      "decisions": [
+        { 
+          "text": "Astepti rucsacul suspect pe banda fara sa faci nimic.", 
+          "targetBlock": "ordin_scaner"
+        },
+        { 
+          "text": "Incerci sa o anunti pe colega ta, Sandra: 'Avem o problema aici.'", 
+          "targetBlock": "alerta_sandra", 
+          "effects": [{ "type": "ADD", "property": "suspiciune", "value": 20 }] 
+        }
+      ]
+    },
+    "alerta_sandra": {
+      "text": "Sandra te priveste ciudat si vrea sa te intrebe ce se intampla cu tine. In casca auzi un zgomot puternic si vocea striga: 'Ultima avertizare, Ethan! Vrei sa se intample ceva cu Sandra din cauza ta? Treci inapoi la post!'",
+      "decisions": [
+        { 
+          "text": "Te retragi speriat.", 
+          "targetBlock": "ordin_scaner", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 15 }] 
+        },
+        { 
+          "text": "Incerci sa ii faci un semn discret Sandrei cu mana spre iesire.", 
+          "targetBlock": "ordin_scaner", 
+          "effects": [{ "type": "ADD", "property": "suspiciune", "value": 15 }] 
+        }
+      ]
+    },
+    "ordin_scaner": {
+      "text": "Pe banda scanerului apare un rucsac negru. Vocea din casca iti ordona: 'Acesta este. Opreste senzorul chiar acum si lasa rucsacul sa treaca.'",
+      "decisions": [
+        { 
+          "text": "Opresti senzorul si lasi rucsacul sa treaca mai departe.", 
+          "targetBlock": "ordin_bagaje", 
+          "effects": [{ "type": "SUB", "property": "integritate", "value": 30 }, { "type": "ADD", "property": "suspiciune", "value": 10 }] 
+        },
+        { 
+          "text": "Refuzi si strigi in terminal: 'Avem o eroare tehnica, opriti banda!'", 
+          "targetBlock": "interfata_sef", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 20 }] 
+        }
+      ]
+    },
+    "interfata_sef": {
+      "text": "Seful tau, vine nervos spre tine: 'Ethan, de ce ai oprit banda? Avem o coada uriasa de pasageri!' In casca auzi: 'Minte-l si scapa de el rapid, altfel dau semnalul asasinului.'",
+      "decisions": [
+        { 
+          "text": "Spui o minciuna: 'A fost doar o alarma falsa. Am rezolvat.'", 
+          "targetBlock": "ordin_bagaje", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 10 }] 
+        },
+        { 
+          "text": "Te panichezi si spui: 'Nu ma simt prea bine. Am nevoie de o pauza.'", 
+          "targetBlock": "final_arestat", 
+          "effects": [{ "type": "ADD", "property": "suspiciune", "value": 40 }] 
+        }
+      ]
+    },
+    "ordin_bagaje": {
+      "text": "Rucsacul a trecut de filtru si merge pe banda spre subsol. Vocea din casca iti spune: 'Foarte bine, Ethan. Acum paraseste postul de la scaner. Coboara in subsol, la zona de sortare a bagajelor si asigura-te ca rucsacul este pus in containerul numarul 12.'",
+      "decisions": [
+        { 
+          "text": "Asculti ordinul si cobori la subsol.", 
+          "targetBlock": "zona_bagaje"
+        },
+        { 
+          "text": "Refuzi sa pleci de la post si incerci sa scoti casca.", 
+          "targetBlock": "final_tragedie", 
+          "effects": [{ "type": "SUB", "property": "viata_nora", "value": 100 }] 
+        }
+      ]
+    },
+    "zona_bagaje": {
+      "text": "Ajungi in subsolul aeroportului. Vezi rucsacul negru, dar esti blocat de un agent corupt care lucreaza cu cel din casca. Acesta iti intinde un stick USB si iti spune: 'Pune asta in serverul central de zbor ca sa blocam radarele.'",
+      "decisions": [
+        { 
+          "text": "Iei stick-ul si mergi spre camera serverelor.", 
+          "targetBlock": "sabotaj_stick", 
+          "effects": [{ "type": "ADD", "property": "dovezi", "value": 2 }] 
+        },
+        { 
+          "text": "Refuzi si incerci sa te lupti cu agentul.", 
+          "targetBlock": "confruntare_subsol", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 20 }] 
+        }
+      ]
+    },
+    "sabotaj_stick": {
+      "text": "Esti in fata serverului principal. Vocea din casca iti urla: 'Baga stick-ul odata, Ethan! Nu mai sta pe ganduri!'",
+      "decisions": [
+        { 
+          "text": "Introduci stick-ul in server.", 
+          "targetBlock": "mesaj_nora", 
+          "effects": [{ "type": "SUB", "property": "integritate", "value": 40 }] 
+        },
+        { 
+          "text": "Distrugi stick-ul si raportezi in casca o eroare falsa de sistem.", 
+          "targetBlock": "confruntare_subsol", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 25 }, { "type": "SUB", "property": "viata_nora", "value": 20 }] 
+        }
+      ]
+    },
+    "confruntare_subsol": {
+      "text": "Agentul corupt isi da seama ca l-ai mintit. Scoate un pistol si trage spre tine. Glontul nimereste o conducta de abur din subsol, umpland camera cu fum.",
+      "decisions": [
+        { 
+          "text": "Fugi spre usile care duc direct pe pista de decolare.", 
+          "targetBlock": "panica_terminal"
+        },
+        { 
+          "text": "Te arunci peste el si incerci sa ii iei arma ca sa il arestezi.", 
+          "targetBlock": "lupta_finala", 
+          "condition": {
+            "type": "AND",
+            "conditions": [
+              { "type": "COMPARISON", "property": "stres", "operator": "<", "value": 70 },
+              { "type": "COMPARISON", "property": "dovezi", "operator": ">=", "value": 2 }
+            ]
+          },
+          "effects": [{ "type": "ADD", "property": "dovezi", "value": 3 }, { "type": "ADD", "property": "stres", "value": 15 }] 
+        }
+      ]
+    },
+    "mesaj_nora": {
+      "text": "Monitoarele din aeroport incep sa pice din cauza virusului de pe stick. Pe un ecran de urgenta o vezi pe Nora la poarta de decolare. Vocea din casca iti spune: 'Ai fost de ajutor, Ethan. Dar acum stergem toate urmele. La revedere.'",
+      "decisions": [
+        { 
+          "text": "Te grabesti direct spre terminalul principal ca sa o cauti pe Nora.", 
+          "targetBlock": "panica_terminal", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 10 }] 
+        },
+        { 
+          "text": "Incerci sa suni la securitate de pe un telefon fix din subsol.", 
+          "targetBlock": "panica_terminal", 
+          "effects": [{ "type": "ADD", "property": "suspiciune", "value": 15 }, { "type": "ADD", "property": "dovezi", "value": 2 }] 
+        }
+      ]
+    },
+    "panica_terminal": {
+      "text": "Alarmele suna peste tot. Pasagerii fug speriati. O vezi pe Nora prinsa in multime la Poarta 42, iar asasinul se indreapta spre ea.",
+      "decisions": [
+        { 
+          "text": "Strigi spre Nora sa se lase la pamant si il ataci direct pe asasin.", 
+          "targetBlock": "lupta_finala", 
+          "effects": [{ "type": "ADD", "property": "viata_nora", "value": 10 }] 
+        },
+        { 
+          "text": "Te pui in fata Norei pentru a o proteja de suspect.", 
+          "targetBlock": "lupta_finala", 
+          "effects": [{ "type": "ADD", "property": "stres", "value": 20 }] 
+        }
+      ]
+    },
+    "lupta_finala": {
+      "text": "Te arunci peste asasin pe puntea spre avion. Te loveste, dar reusesti sa ii smulgi detonatorul bombei din rucsac. Avionul e gata sa decoleze.",
+      "decisions": [
+        { 
+          "text": "Distrugi detonatorul si blochezi usa avionului.", 
+          "targetBlock": "final_erou"
+        },
+        { 
+          "text": "Incerci sa il imobilizezi pe asasin pana vine paza aeroportului.", 
+          "targetBlock": "final_erou", 
+          "condition": {
+            "type": "OR",
+            "conditions": [
+              { "type": "COMPARISON", "property": "dovezi", "operator": ">=", "value": 4 },
+              { "type": "COMPARISON", "property": "suspiciune", "operator": "<", "value": 30 }
+            ]
+          },
+          "effects": [{ "type": "ADD", "property": "dovezi", "value": 2 }] 
+        }
+      ]
+    },
+    "final_erou": { "text": "FELICITARI! Ai salvat aeroportul LAX si pe Nora. Aasinul a reusit sa fuga, dar planul lui a fost complet distrus de tine.", "decisions": [] },
+    "final_tragedie": { "text": "GAME OVER. Ai riscat prea mult, iar asasinul si-a dus amenintarea la capat. Nora a patit ceva din cauza ta.", "decisions": [] },
+    "final_panica": { "text": "GAME OVER. Nivelul de stres a depasit limita. Ethan s-a prabusit in terminal.", "decisions": [] },
+    "final_arestat": { "text": "GAME OVER. Nivelul de suspiciune a fost prea mare. Seful si politia te-au incatusat considerandu-te complice.", "decisions": [] }
   }
 }
